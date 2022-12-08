@@ -102,6 +102,13 @@ function gateway_lambda(this: any, options: GatewayLambdaOptions) {
       console.log('HOOK MSG', json)
     }
 
+    json.gateway = {
+      params: event.pathParameters,
+      query: { ...(event.queryStringParameters||{}), ...(event.multiValueQueryStringParameters||{}) },
+    }
+
+    console.log(json)
+
     let result: any = await gateway(json, { res, event, context })
 
     if (result.out) {
